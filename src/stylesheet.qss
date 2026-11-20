@@ -1,0 +1,916 @@
+/* Glass theme for qBittorrent 5.x
+ *
+ * Tokens (QSS has no variables, so values are repeated):
+ *   text primary    rgba(255,255,255,0.94)
+ *   text secondary  rgba(225,232,245,0.65)
+ *   text muted      rgba(190,202,224,0.45)
+ *   surface         rgba(255,255,255,0.07)   hover 0.11   active 0.16
+ *   border outer    rgba(255,255,255,0.18)   subtle 0.08
+ *   accent cyan     #5AC8FA    active tab text #70D7FF
+ *   popup solid     #1a2036
+ * Radius hierarchy: cards/headers 12px, tabs/buttons 8px, pills = half height.
+ */
+
+/* ---------- Window canvas ---------- */
+
+QMainWindow {
+    border-image: url(:/uitheme/background.png) 0 0 0 0 stretch stretch;
+}
+
+/* Preferences and other dialogs: one flat colour, no gradient. It is the
+   colour at the centre of the main window background image. */
+QDialog {
+    background: #24244c;
+}
+
+QWidget {
+    color: rgba(255, 255, 255, 0.94);
+    font-size: 13px;
+    selection-background-color: rgba(90, 165, 215, 0.55);
+    selection-color: #ffffff;
+}
+
+QWidget:disabled {
+    color: rgba(190, 202, 224, 0.45);
+}
+
+QLabel {
+    background: transparent;
+}
+
+QStackedWidget,
+QSplitter,
+QScrollArea,
+QScrollArea > QWidget > QWidget {
+    background: transparent;
+}
+
+QScrollArea {
+    border: none;
+}
+
+/* The tooltip window is square and opaque; a theme cannot change that.
+   The radius rounds the border line; the 2px outside it keep the fill. */
+QToolTip {
+    background-color: #1c2238;
+    color: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 7px;
+    padding: 5px 9px;
+}
+
+/* ---------- Toolbar: two capsules ---------- */
+
+/* qBittorrent fixes the item order: action buttons, flexible gap, search
+   field, lock. A theme cannot wrap a group of items in a box, so each
+   capsule is assembled from its items:
+     left   Open button (round left end) ... Preferences button (round right end)
+     right  filter container image (round left end) ... lock button (round right end)
+   Every item paints the same fill and spacing is 0, so the pieces join
+   into one shape. Capsule height = 34px.
+   Qt insets the items by (border-left + padding-left) + margin-top on every
+   side, so border and padding stay 0 and the margin stays uniform. */
+QToolBar {
+    background: transparent;
+    border: none;
+    margin: 6px;
+    padding: 0;
+    min-height: 34px;
+    max-height: 34px;
+    spacing: 0;
+    qproperty-iconSize: 22px 22px;
+}
+
+QToolBar::separator {
+    background: rgba(255, 255, 255, 0.10);
+    width: 1px;
+    margin: 6px 6px;
+}
+
+/* Filter container. The image is the left end and body of the right capsule
+   plus the right part of the search capsule (tools/make_capsule.py); it is
+   anchored right, so the flexible spacer on the left stays empty. The line
+   edit draws the left end of the search capsule. The other spacer widgets
+   that match this rule have no height. */
+QToolBar > QWidget {
+    background: url(:/uitheme/ui/search-cap.png) no-repeat right center;
+}
+
+/* Spacers between the button groups: fill the gap inside the left capsule.
+   Only min-height is set, so the attribute this rule matches on is unchanged. */
+QToolBar > QWidget[minimumWidth="16"] {
+    background: rgba(30, 30, 36, 0.78);
+    min-height: 34px;
+}
+
+QToolBar > QWidget > QLineEdit {
+    background: #14151b;
+    border: 1px solid #3a3c46;
+    border-right: none;
+    border-radius: 0;
+    border-top-left-radius: 14px;
+    border-bottom-left-radius: 14px;
+    min-height: 26px;
+    max-height: 26px;
+    margin-left: 8px;
+    padding: 0 6px 0 10px;
+    color: rgba(255, 255, 255, 0.94);
+}
+
+/* Only the border changes on focus: a new fill would stop at the divider. */
+QToolBar > QWidget > QLineEdit:focus {
+    border-color: rgba(90, 200, 250, 0.70);
+}
+
+/* "Filter by:" label: its left border is the divider inside the search
+   capsule. Its height sets the container height to the capsule height.
+   Label and drop-down widths are fixed because the container image has a
+   fixed width. */
+QToolBar > QWidget > QLabel {
+    border-left: 1px solid rgba(255, 255, 255, 0.16);
+    margin: 9px 0;
+    padding-left: 10px;
+    min-height: 16px;
+    max-height: 16px;
+    min-width: 54px;
+    max-width: 54px;
+    color: rgba(225, 232, 245, 0.65);
+}
+
+QToolBar > QWidget > QComboBox {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    min-height: 20px;
+    max-height: 20px;
+    min-width: 70px;
+    max-width: 70px;
+    margin-right: 6px;
+    padding: 0 22px 0 6px;
+    color: rgba(255, 255, 255, 0.94);
+}
+
+QToolBar > QWidget > QComboBox:hover,
+QToolBar > QWidget > QComboBox:on {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+QToolBar > QWidget > QComboBox:focus {
+    border-color: rgba(90, 200, 250, 0.70);
+}
+
+QToolButton {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 5px 7px;
+    color: rgba(255, 255, 255, 0.86);
+}
+
+QToolButton:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+QToolButton:pressed,
+QToolButton:checked {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+QToolButton::menu-indicator {
+    image: url(:/uitheme/ui/arrow-down.svg);
+    width: 10px;
+    height: 10px;
+    subcontrol-position: right center;
+}
+
+/* Capsule segments. Must follow the `QToolBar > QWidget` rule: same
+   specificity, so the later rule wins. No border lines: Qt paints a
+   rounded and a square segment 1px apart when both have borders, which
+   showed as a step after the first button. Fixed 34x34 so every button is
+   square (icon 22 + 2 * 6 padding). */
+QToolBar > QToolButton {
+    background: rgba(30, 30, 36, 0.78);
+    border: none;
+    border-radius: 0;
+    padding: 6px;
+    min-width: 22px;
+    max-width: 22px;
+    min-height: 22px;
+    max-height: 22px;
+}
+
+/* Hover and pressed: a 26px disc image centred on the icon, which leaves
+   4px of capsule around it. An image stays a circle on any button width. */
+QToolBar > QToolButton:hover {
+    background: rgba(30, 30, 36, 0.78) url(:/uitheme/ui/hover-disc.png) no-repeat center center;
+}
+
+QToolBar > QToolButton:pressed,
+QToolBar > QToolButton:checked {
+    background: rgba(30, 30, 36, 0.78) url(:/uitheme/ui/pressed-disc.png) no-repeat center center;
+}
+
+/* Capsule ends. The first and last action buttons can only be matched by
+   their text, which is the English text; in another language these two
+   ends stay square. */
+QToolBar > QToolButton[text="Open"] {
+    border-top-left-radius: 17px;
+    border-bottom-left-radius: 17px;
+}
+
+QToolBar > QToolButton[text="Preferences"] {
+    border-top-right-radius: 17px;
+    border-bottom-right-radius: 17px;
+}
+
+/* Lock button: right end of the right capsule. Matched by its menu
+   (set / clear password), which works in every language. The disc is
+   anchored left because the menu arrow widens the button on the right. */
+QToolBar > QToolButton[popupMode="1"] {
+    border-top-right-radius: 17px;
+    border-bottom-right-radius: 17px;
+    padding-right: 20px;
+}
+
+QToolBar > QToolButton[popupMode="1"]:hover {
+    background-position: left center;
+}
+
+QToolBar > QToolButton[popupMode="1"]:pressed {
+    background-position: left center;
+}
+
+QToolBar > QToolButton::menu-button {
+    border: none;
+    width: 14px;
+    right: 6px;
+}
+
+QToolBar > QToolButton::menu-arrow {
+    image: url(:/uitheme/ui/arrow-down.svg);
+    width: 10px;
+    height: 10px;
+}
+
+/* ---------- Text inputs ---------- */
+
+QLineEdit,
+QTextEdit,
+QPlainTextEdit,
+QTextBrowser,
+QAbstractSpinBox,
+QComboBox {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 4px 8px;
+    color: rgba(255, 255, 255, 0.94);
+}
+
+QLineEdit:hover,
+QAbstractSpinBox:hover,
+QComboBox:hover {
+    background: rgba(255, 255, 255, 0.09);
+}
+
+QLineEdit:focus,
+QTextEdit:focus,
+QPlainTextEdit:focus,
+QAbstractSpinBox:focus,
+QComboBox:focus {
+    border-color: rgba(90, 200, 250, 0.70);
+}
+
+QLineEdit:disabled,
+QAbstractSpinBox:disabled,
+QComboBox:disabled {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+QAbstractSpinBox QLineEdit,
+QComboBox QLineEdit {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* ---------- Spin boxes and combo boxes ---------- */
+
+QAbstractSpinBox {
+    padding: 4px 20px 4px 6px;
+}
+
+QAbstractSpinBox::up-button,
+QAbstractSpinBox::down-button {
+    subcontrol-origin: border;
+    width: 18px;
+    border: none;
+    background: transparent;
+}
+
+QAbstractSpinBox::up-button {
+    subcontrol-position: top right;
+}
+
+QAbstractSpinBox::down-button {
+    subcontrol-position: bottom right;
+}
+
+QAbstractSpinBox::up-arrow {
+    image: url(:/uitheme/ui/arrow-up.svg);
+    width: 10px;
+    height: 10px;
+}
+
+QAbstractSpinBox::down-arrow {
+    image: url(:/uitheme/ui/arrow-down.svg);
+    width: 10px;
+    height: 10px;
+}
+
+/* combobox-popup: 0 selects the list popup. The macOS menu-style popup
+   mis-sizes under a style sheet and shows only the first row. */
+QComboBox {
+    padding-right: 24px;
+    min-height: 18px;
+    combobox-popup: 0;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    width: 22px;
+    border: none;
+}
+
+QComboBox::down-arrow {
+    image: url(:/uitheme/ui/arrow-down.svg);
+    width: 12px;
+    height: 12px;
+}
+
+/* On macOS the popup window is translucent, so the rounded list shows
+   rounded corners. The frame around the list stays invisible. */
+QComboBoxPrivateContainer {
+    background: transparent;
+    border: none;
+}
+
+QComboBox QAbstractItemView {
+    background: #1a2036;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    padding: 4px;
+    outline: 0;
+}
+
+/* The toolbar drop-down is narrow; its list must fit "Save path". */
+QToolBar > QWidget > QComboBox QAbstractItemView {
+    min-width: 104px;
+}
+
+QComboBox QAbstractItemView::item {
+    min-height: 24px;
+    padding: 0 8px;
+    border: none;
+    border-radius: 6px;
+}
+
+QComboBox QAbstractItemView::item:selected {
+    background: rgba(90, 165, 215, 0.45);
+}
+
+/* ---------- Buttons ---------- */
+
+QPushButton {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    padding: 5px 14px;
+    color: rgba(255, 255, 255, 0.94);
+}
+
+QPushButton:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+QPushButton:pressed,
+QPushButton:checked {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+QPushButton:default {
+    background: rgba(75, 130, 165, 0.55);
+    border-color: rgba(112, 215, 255, 0.45);
+}
+
+QPushButton:default:hover {
+    background: rgba(75, 130, 165, 0.75);
+}
+
+QPushButton:disabled {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+QPushButton:flat {
+    background: transparent;
+    border-color: transparent;
+}
+
+/* ---------- Check boxes and radio buttons ---------- */
+
+QCheckBox,
+QRadioButton {
+    background: transparent;
+    spacing: 7px;
+}
+
+QCheckBox::indicator,
+QRadioButton::indicator,
+QGroupBox::indicator,
+QAbstractItemView::indicator {
+    width: 14px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 4px;
+}
+
+QRadioButton::indicator {
+    border-radius: 8px;
+}
+
+QCheckBox::indicator:hover,
+QRadioButton::indicator:hover,
+QGroupBox::indicator:hover,
+QAbstractItemView::indicator:hover {
+    border-color: rgba(112, 215, 255, 0.70);
+}
+
+QCheckBox::indicator:checked,
+QGroupBox::indicator:checked,
+QAbstractItemView::indicator:checked {
+    background: #3f8fc4;
+    border-color: #5ac8fa;
+    image: url(:/uitheme/ui/check.svg);
+}
+
+QCheckBox::indicator:indeterminate,
+QAbstractItemView::indicator:indeterminate {
+    background: #3f8fc4;
+    border-color: #5ac8fa;
+    image: url(:/uitheme/ui/dash.svg);
+}
+
+QRadioButton::indicator:checked {
+    background: #3f8fc4;
+    border-color: #5ac8fa;
+    image: url(:/uitheme/ui/radio.svg);
+}
+
+QCheckBox::indicator:disabled,
+QRadioButton::indicator:disabled,
+QGroupBox::indicator:disabled,
+QAbstractItemView::indicator:disabled {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Group boxes: glass cards ---------- */
+
+QGroupBox {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    margin-top: 24px;
+    padding: 10px 10px 8px 10px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 6px;
+    top: 2px;
+    padding: 0 4px;
+    color: rgba(225, 232, 245, 0.80);
+    font-weight: 600;
+}
+
+QFrame[frameShape="4"],
+QFrame[frameShape="5"] {
+    color: rgba(255, 255, 255, 0.10);
+}
+
+/* ---------- Lists, trees, tables ---------- */
+
+QAbstractItemView {
+    background: rgba(12, 16, 32, 0.22);
+    alternate-background-color: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    outline: 0;
+    show-decoration-selected: 1;
+    selection-background-color: rgba(255, 255, 255, 0.14);
+    selection-color: #ffffff;
+}
+
+/* 29px + 1px line = 30px rows. The table progress bars are the row height
+   minus 2px, and their radii below depend on that 28px. */
+QAbstractItemView::item {
+    min-height: 29px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+QAbstractItemView::item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+QAbstractItemView::item:selected {
+    background: rgba(255, 255, 255, 0.13);
+}
+
+QTableView {
+    gridline-color: rgba(255, 255, 255, 0.06);
+}
+
+QTableCornerButton::section {
+    background: transparent;
+    border: none;
+}
+
+/* Column headers: one floating rounded bar */
+QHeaderView {
+    background: transparent;
+    border: none;
+}
+
+QHeaderView::section {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(225, 232, 245, 0.78);
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-right: 1px solid rgba(255, 255, 255, 0.10);
+    padding: 0 10px;
+    min-height: 30px;
+    font-weight: 500;
+}
+
+QHeaderView::section:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+QHeaderView::section:first {
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    border-top-left-radius: 11px;
+    border-bottom-left-radius: 11px;
+}
+
+QHeaderView::section:last {
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    border-top-right-radius: 11px;
+    border-bottom-right-radius: 11px;
+}
+
+QHeaderView::section:only-one {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 11px;
+}
+
+QHeaderView::up-arrow {
+    image: url(:/uitheme/ui/arrow-up.svg);
+    width: 10px;
+    height: 10px;
+    subcontrol-position: center right;
+    right: 6px;
+}
+
+QHeaderView::down-arrow {
+    image: url(:/uitheme/ui/arrow-down.svg);
+    width: 10px;
+    height: 10px;
+    subcontrol-position: center right;
+    right: 6px;
+}
+
+/* ---------- Progress bars: capsules ---------- */
+
+/* Table bars are painted 28px high (row height - 2px). The 4px vertical
+   margin makes the visible track 20px high; the fill is 14px high, 3px
+   inside the track. Every radius below is exactly half a height: with any
+   other value the ends turn into rounded rectangles or ovals.
+   QSS cannot clip the fill to the track, and Qt drops border-radius on a
+   fill narrower than two radii, so the fill is a 3-slice capsule image
+   (tools/make_capsule.py). Below 14px of fill the two end pieces overlap
+   and the shape is not exact. */
+QProgressBar {
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 10px;
+    margin: 4px 0;
+    padding: 2px;
+    min-height: 14px;
+    max-height: 14px;
+    text-align: center;
+    color: #ffffff;
+    /* No font overrides here: qBittorrent paints table bars through an
+       unshown QProgressBar and a QSS font breaks the label metrics. */
+}
+
+/* Cuts are in image pixels and the image is 2x: 14 = 7px on screen. */
+QProgressBar::chunk {
+    background: transparent;
+    border-width: 0 7px;
+    border-image: url(:/uitheme/ui/progress-chunk.png) 0 14 0 14 repeat stretch;
+}
+
+/* ---------- Sidebar (status / categories / tags / trackers) ---------- */
+
+/* A rounded card, with a gap to the window edge and to the content. */
+TransferListFiltersWidget QScrollArea {
+    background: rgba(8, 11, 24, 0.34);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 12px;
+    margin: 0 4px 6px 6px;
+    padding: 4px 0;
+}
+
+TransferListFiltersWidget QCheckBox {
+    color: rgba(180, 195, 220, 0.62);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 12px 12px 4px 12px;
+}
+
+TransferListFiltersWidget QCheckBox::indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    background: transparent;
+    border: 1px solid rgba(180, 195, 220, 0.40);
+}
+
+TransferListFiltersWidget QCheckBox::indicator:checked {
+    background: rgba(180, 195, 220, 0.30);
+    border-color: rgba(180, 195, 220, 0.55);
+    image: url(:/uitheme/ui/check.svg);
+}
+
+TransferListFiltersWidget QAbstractItemView {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+}
+
+TransferListFiltersWidget QAbstractItemView::item {
+    min-height: 28px;
+    margin: 1px 6px;
+    padding: 0 6px;
+    border: 1px solid transparent;
+    border-radius: 15px;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+TransferListFiltersWidget QAbstractItemView::item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+TransferListFiltersWidget QAbstractItemView::item:selected {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid transparent;
+    color: #ffffff;
+}
+
+/* ---------- Properties panel (inspector) ---------- */
+
+PropertiesWidget QPushButton {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 6px 14px;
+    color: rgba(225, 232, 245, 0.65);
+}
+
+PropertiesWidget QPushButton:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.94);
+}
+
+PropertiesWidget QPushButton:pressed {
+    background: rgba(75, 130, 165, 0.35);
+    border-color: rgba(112, 215, 255, 0.22);
+    color: #70d7ff;
+}
+
+/* ---------- Tabs (main tabs, Preferences, dialogs) ---------- */
+
+QTabWidget::pane {
+    background: transparent;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+QTabBar {
+    background: transparent;
+}
+
+QTabBar::tab {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 6px 14px;
+    margin: 4px 2px;
+    color: rgba(225, 232, 245, 0.65);
+}
+
+QTabBar::tab:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.94);
+}
+
+QTabBar::tab:selected {
+    background: rgba(75, 130, 165, 0.35);
+    border-color: rgba(112, 215, 255, 0.22);
+    color: #70d7ff;
+}
+
+/* ---------- Splitters and scroll bars ---------- */
+
+QSplitter::handle {
+    background: transparent;
+}
+
+QSplitter::handle:horizontal {
+    width: 6px;
+}
+
+QSplitter::handle:vertical {
+    height: 6px;
+}
+
+QScrollBar {
+    background: transparent;
+    border: none;
+}
+
+QScrollBar:vertical {
+    width: 10px;
+    margin: 2px;
+}
+
+QScrollBar:horizontal {
+    height: 10px;
+    margin: 2px;
+}
+
+QScrollBar::handle {
+    background: rgba(255, 255, 255, 0.20);
+    border-radius: 3px;
+}
+
+QScrollBar::handle:hover {
+    background: rgba(255, 255, 255, 0.34);
+}
+
+QScrollBar::handle:vertical {
+    min-height: 28px;
+}
+
+QScrollBar::handle:horizontal {
+    min-width: 28px;
+}
+
+QScrollBar::add-line,
+QScrollBar::sub-line {
+    width: 0;
+    height: 0;
+    border: none;
+    background: transparent;
+}
+
+QScrollBar::add-page,
+QScrollBar::sub-page {
+    background: transparent;
+}
+
+QAbstractScrollArea::corner {
+    background: transparent;
+}
+
+/* ---------- Status bar ---------- */
+
+QStatusBar {
+    background: rgba(8, 11, 24, 0.30);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(235, 242, 255, 0.90);
+}
+
+QStatusBar QLabel {
+    color: rgba(235, 242, 255, 0.90);
+}
+
+QStatusBar QPushButton {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 2px 8px;
+    color: rgba(235, 242, 255, 0.90);
+}
+
+QStatusBar QPushButton:hover {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+QStatusBar QFrame[frameShape="5"] {
+    color: rgba(255, 255, 255, 0.14);
+}
+
+/* ---------- Menus ---------- */
+
+QMenuBar {
+    background: transparent;
+}
+
+QMenuBar::item {
+    background: transparent;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+QMenuBar::item:selected {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+QMenu {
+    background: #1a2036;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+QMenu::item {
+    background: transparent;
+    padding: 5px 22px 5px 12px;
+    border-radius: 6px;
+}
+
+QMenu::item:selected {
+    background: rgba(90, 165, 215, 0.45);
+    color: #ffffff;
+}
+
+QMenu::item:disabled {
+    color: rgba(190, 202, 224, 0.45);
+}
+
+QMenu::separator {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.10);
+    margin: 5px 8px;
+}
+
+QMenu::icon {
+    padding-left: 8px;
+}
+
+QMenu::indicator {
+    width: 14px;
+    height: 14px;
+    left: 6px;
+}
+
+QMenu::indicator:checked {
+    image: url(:/uitheme/ui/check.svg);
+}
+
+QMenu::right-arrow {
+    image: url(:/uitheme/ui/arrow-right.svg);
+    width: 12px;
+    height: 12px;
+    right: 6px;
+}
+
+/* ---------- Sliders ---------- */
+
+QSlider::groove:horizontal {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 2px;
+}
+
+QSlider::sub-page:horizontal {
+    background: #5ac8fa;
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal {
+    width: 14px;
+    height: 14px;
+    margin: -6px 0;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+}
